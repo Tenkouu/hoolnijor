@@ -1,6 +1,7 @@
 require("@babel/polyfill");
 import Search from './model/search';
-
+import {elements} from './view/base';
+import * as searchView from './view/searchView';
 /**
  * Web аппын төлөв
  * - Хайлтын query, үр дүн
@@ -13,24 +14,27 @@ const state = {};
 
 const controlSearch = async () => {
     // 1. Вэбээс хайлтын түлхүүр үгийг гаргаж авна.
-    const query = 'pizza';
+    const query = searchView.getInput();
 
     if(query){
     // 2. Шинээр хайлтын обьектийг үүсгэж өгнө.
         state.search = new Search(query);
 
     // 3. Хайлт хийхэд зориулж дэлгэцийн UI-г бэлтгэнэ.
+        searchView.clearSearchQuery();
+        searchView.clearSearchResult();
 
     // 4. Хайлтыг гүйцэтгэнэ.
         await state.search.doSearch();
 
     // 5. Хайлтын үр дүнг дэлгэцэнд үзүүлнэ.
-        console.log(state.search.result);
+        if(state.search.result === undefined) alert('Хайлтаар илэрцгүй.')
+        else searchView.renderRecipes(state.search.result);
     }
-
+    
 };
 
-document.querySelector('.search').addEventListener('submit', e => {
-    e.preventDefault(),
+elements.searchForm.addEventListener('submit', e => {
+    e.preventDefault();
     controlSearch();
 });
