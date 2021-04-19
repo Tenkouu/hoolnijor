@@ -14,6 +14,10 @@ import Recipe from './model/recipe';
 
 const state = {};
 
+/**
+ *  Хайлтын контроллер = Model --> Controller <-- View
+ */
+
 const controlSearch = async () => {
     // 1. Вэбээс хайлтын түлхүүр үгийг гаргаж авна.
     const query = searchView.getInput();
@@ -55,5 +59,29 @@ elements.pageButtons.addEventListener('click', e => {
     }
 });
 
-const r = new Recipe(47746);
-r.getRecipe();
+/**
+ *  Жорын контроллер
+ */
+
+const controlRecipe = async () => {
+    // 1. URL-аас ID-ийг салгаж авна.
+    const id = window.location.hash.replace('#', '');
+
+    // 2. Жорын моделийг үүсгэж өгнө. 
+    state.recipe = new Recipe(id);
+
+    // 3. UI-ийг бэлтгэнэ.
+
+
+    // 4. Жороо татаж авчирна.
+    await state.recipe.getRecipe();
+
+    // 5. Жорыг гүйцэтгэх хугацаа болох орцыг тооцоолно.
+    state.recipe.calcTime();
+    state.recipe.calcPortion();
+
+    // 6. Жороо дэлгэцэнд гаргана.
+    console.log(state.recipe);
+
+}
+window.addEventListener('hashchange', controlRecipe);
