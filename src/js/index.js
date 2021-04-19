@@ -1,8 +1,9 @@
 require("@babel/polyfill");
 import Search from './model/search';
-import {elements, renderLoader, clearLoader} from './view/base';
+import { elements, renderLoader, clearLoader } from './view/base';
 import * as searchView from './view/searchView';
 import Recipe from './model/recipe';
+import { renderRecipe, clearRecipe } from './view/recipeView';
 
 /**
  * Web аппын төлөв
@@ -71,17 +72,20 @@ const controlRecipe = async () => {
     state.recipe = new Recipe(id);
 
     // 3. UI-ийг бэлтгэнэ.
-
+    clearRecipe();
+    renderLoader(elements.recipeDiv);
 
     // 4. Жороо татаж авчирна.
     await state.recipe.getRecipe();
 
     // 5. Жорыг гүйцэтгэх хугацаа болох орцыг тооцоолно.
+    clearLoader();
     state.recipe.calcTime();
     state.recipe.calcPortion();
 
     // 6. Жороо дэлгэцэнд гаргана.
-    console.log(state.recipe);
+    renderRecipe(state.recipe);
+};
 
-}
 window.addEventListener('hashchange', controlRecipe);
+window.addEventListener('load', controlRecipe);
