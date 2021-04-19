@@ -3,7 +3,7 @@ import Search from './model/search';
 import { elements, renderLoader, clearLoader } from './view/base';
 import * as searchView from './view/searchView';
 import Recipe from './model/recipe';
-import { renderRecipe, clearRecipe } from './view/recipeView';
+import { renderRecipe, clearRecipe, highlightSelectedRecipe } from './view/recipeView';
 
 /**
  * Web аппын төлөв
@@ -74,6 +74,7 @@ const controlRecipe = async () => {
     // 3. UI-ийг бэлтгэнэ.
     clearRecipe();
     renderLoader(elements.recipeDiv);
+    highlightSelectedRecipe(id);
 
     // 4. Жороо татаж авчирна.
     await state.recipe.getRecipe();
