@@ -4,6 +4,8 @@ import { elements, renderLoader, clearLoader } from './view/base';
 import * as searchView from './view/searchView';
 import Recipe from './model/recipe';
 import { renderRecipe, clearRecipe, highlightSelectedRecipe } from './view/recipeView';
+import List from './model/list';
+import * as listView from './view/listView';
 
 /**
  * Web аппын төлөв
@@ -67,7 +69,7 @@ elements.pageButtons.addEventListener('click', e => {
 const controlRecipe = async () => {
     // 1. URL-аас ID-ийг салгаж авна.
     const id = window.location.hash.replace('#', '');
-
+    if(id){
     // 2. Жорын моделийг үүсгэж өгнө. 
     state.recipe = new Recipe(id);
 
@@ -86,7 +88,37 @@ const controlRecipe = async () => {
 
     // 6. Жороо дэлгэцэнд гаргана.
     renderRecipe(state.recipe);
+    }
+
 };
 
-window.addEventListener('hashchange', controlRecipe);
-window.addEventListener('load', controlRecipe);
+// window.addEventListener('hashchange', controlRecipe);
+// window.addEventListener('load', controlRecipe);
+
+['hashchange', 'load'].forEach(e => window.addEventListener(e, controlRecipe));
+
+/**
+ *  Найрлаганы контроллер
+ */
+
+const controlList = () => {
+    // Найрлаганы моделийг үүсгэнэ.
+    state.list = new List();
+
+    // Өмнө харагдаж байсан найрлагануудыг дэлгэцээс зайлуулна.
+    listView.clearItems();
+
+    // Уг модел руу харагдаж байгаа бүх найрлагыг авч хийнэ.
+    state.recipe.ingredients.forEach(n => {
+        // Тухайн найрлагыг модел рүү оруулна.
+        state.list.addItem(n); 
+        // Тухайн найрлагыг дэлгэцэнд гаргана.
+        listView.renderItem(n);
+    });
+};
+
+elements.recipeDiv.addEventListener('click', e => {
+    if(e.target.matches('.recipe__btn, .recipe__btn *')) {
+        controlList();
+    }
+});
