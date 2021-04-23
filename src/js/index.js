@@ -6,6 +6,7 @@ import Recipe from './model/recipe';
 import { renderRecipe, clearRecipe, highlightSelectedRecipe } from './view/recipeView';
 import List from './model/list';
 import * as listView from './view/listView';
+import Like from './model/like';
 
 /**
  * Web аппын төлөв
@@ -18,7 +19,7 @@ import * as listView from './view/listView';
 const state = {};
 
 /**
- *  Хайлтын контроллер = Model --> Controller <-- View
+ *  Search Controller = Model --> Controller <-- View
  */
 
 const controlSearch = async () => {
@@ -63,7 +64,7 @@ elements.pageButtons.addEventListener('click', e => {
 });
 
 /**
- *  Жорын контроллер
+ *  Recipe controller
  */
 
 const controlRecipe = async () => {
@@ -98,7 +99,7 @@ const controlRecipe = async () => {
 ['hashchange', 'load'].forEach(e => window.addEventListener(e, controlRecipe));
 
 /**
- *  Найрлаганы контроллер
+ *  Ingredients controller
  */
 
 const controlList = () => {
@@ -117,12 +118,6 @@ const controlList = () => {
     });
 };
 
-elements.recipeDiv.addEventListener('click', e => {
-    if(e.target.matches('.recipe__btn, .recipe__btn *')) {
-        controlList();
-    }
-});
-
 elements.shoppingList.addEventListener('click', e => {
     // Click хийсэн li элементийн data-itemid аттрибутыг гаргаж авах.
     const id = e.target.closest('.shopping__item').dataset.itemid;
@@ -133,3 +128,34 @@ elements.shoppingList.addEventListener('click', e => {
     // Дэлгэцээс адил ID-тэй орцыг устгана.
     listView.deleteItem(id);
 });
+
+elements.recipeDiv.addEventListener('click', e => {
+    if(e.target.matches('.recipe__btn, .recipe__btn *')) {
+        controlList();
+    } else if (e.target.matches('.recipe__love, .recipe__love *')) {
+        controlLike();
+    }
+});
+
+/**
+ *  Like controller
+ */
+
+const controlLike = () => {
+    // 1. Лайкийн моделийг үүсгэнэ.
+    if (!state.likes) state.likes = new Like();
+
+    // 2. Одоо харагдаж байгаа жорын ID-ийг олж авах
+    const currentRecipeId = state.recipe.id;
+
+    // 3. Энэ жорыг лайкласан эсэхийг шалгах
+    if (state.likes.isLiked(currentRecipeId)) {
+        // Лайкласан бол лайкийг нь болиулна
+        state.likes.deleteLike(currentRecipeId);
+        console.log(state.likes);
+    } else {
+        // Лайклаагүй бол лайклана.
+        state.likes.addLike(currentRecipeId, state.recipe.title, state.recipe.publisher, state.recipe.image_url);
+        console.log(state.likes);
+    }
+};
