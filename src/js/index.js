@@ -17,8 +17,6 @@ import * as likesView from './view/likeView';
  */
 
 const state = {};
-// Like цэсийг хаах
-likesView.toggleLikeMenu(0);
 
 /**
  *  Search Controller = Model --> Controller <-- View
@@ -71,7 +69,6 @@ elements.pageButtons.addEventListener('click', e => {
 const controlRecipe = async () => {
     // 1. URL-аас ID-ийг салгаж авна.
     const id = window.location.hash.replace('#', '');
-    if (!state.likes) state.likes = new Like();
 
     if(id){
     // 2. Жорын моделийг үүсгэж өгнө. 
@@ -100,6 +97,18 @@ const controlRecipe = async () => {
 // window.addEventListener('load', controlRecipe);
 
 ['hashchange', 'load'].forEach(e => window.addEventListener(e, controlRecipe));
+
+window.addEventListener('load', e => {
+    // Шинээр лайк моделийг апп дөнгөж ачааллагдахад үүсгэнэ.
+    if (!state.likes) state.likes = new Like();
+
+    // Like цэсийг гаргах эсэхийг шийдэх
+    likesView.toggleLikeMenu(state.likes.getNumberOfLikes());
+
+    // Лайкууд байвал тэдгээрийг цэсэнд нэмж харуулна.
+    state.likes.likes.forEach(like => likesView.renderLike(like));
+});
+
 
 /**
  *  Ingredients controller
