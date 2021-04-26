@@ -43,7 +43,6 @@ const controlSearch = async () => {
         if (state.search.result === undefined) alert('Хайлтаар илэрцгүй.')
         else searchView.renderRecipes(state.search.result);
     }
-    
 };
 
 elements.searchForm.addEventListener('submit', e => {
@@ -90,7 +89,6 @@ const controlRecipe = async () => {
     // 6. Жороо дэлгэцэнд гаргана.
     renderRecipe(state.recipe, state.likes.isLiked(id));
     }
-
 };
 
 // window.addEventListener('hashchange', controlRecipe);
@@ -102,7 +100,7 @@ window.addEventListener('load', e => {
     // Шинээр лайк моделийг апп дөнгөж ачааллагдахад үүсгэнэ.
     if (!state.likes) state.likes = new Like();
 
-    // Like цэсийг гаргах эсэхийг шийдэх
+    // Like цэсийг гаргах эсэхийг шийдэх.
     likesView.toggleLikeMenu(state.likes.getNumberOfLikes());
 
     // Лайкууд байвал тэдгээрийг цэсэнд нэмж харуулна.

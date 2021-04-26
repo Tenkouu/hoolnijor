@@ -70,9 +70,7 @@ export const renderRecipe = (recipe, isLiked) => {
 
     <div class="recipe__ingredients">
         <ul class="recipe__ingredient-list">
-
             ${recipe.ingredients.map(el => renderNairlaga(el)).join(' ')}
-
         </ul>
 
         <button class="btn-small recipe__btn">

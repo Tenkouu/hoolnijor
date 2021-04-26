@@ -43,14 +43,14 @@ export const renderRecipes = (recipes, currentPage = 1, resPerPage = 10) => {
 };
 
 // Type --> prev, next
-const createButton = (page, type, direction) => `<button class="btn-inline results__btn--${type}" data-goto=${page}>
+const createButton = (page, type, direction) => 
+`<button class="btn-inline results__btn--${type}" data-goto=${page}>
     
     <span>Хуудас ${page}</span>
     <svg class="search__icon">
         <use href="img/icons.svg#icon-triangle-${direction}"></use>
     </svg>
     
-
 </button>`;
 
 const renderButtons = (currentPage, totalPages) => {
